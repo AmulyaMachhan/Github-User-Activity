@@ -18,7 +18,6 @@ async function fetchData(username){
         }
 
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -26,7 +25,8 @@ async function fetchData(username){
 }
 
 function displayEvents(events){
-    if(events.length){
+    
+    if(events.length === 0){
         console.log("No recent activity found.");
         return;
     }
@@ -58,3 +58,16 @@ function displayEvents(events){
         console.log(`- ${action}`);
     });
 }
+
+const username = process.argv[2];
+if(!username){
+    console.error("Please provide a GitHub username.");
+    process.exit(1); 
+}
+
+fetchData(username)
+    .then((events) => displayEvents(events))
+    .catch((error) => {
+        console.error(err.message);
+        process.exit(1);
+    })
